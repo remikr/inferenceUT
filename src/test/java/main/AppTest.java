@@ -1,4 +1,4 @@
-package com.lille.app.inference_UT;
+package main;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
