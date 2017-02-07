@@ -1,6 +1,7 @@
 package processor;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -89,17 +90,14 @@ public class TestClassProcessor extends AbstractProcessor<CtElement>{
 		//method.beforeBlock=meth.getBody();
 		//System.out.println("method de test");
 		//System.out.println(meth.getBody().getStatements().size());
-	
+		List<CtLiteral> literalOfMethod = new ArrayList<CtLiteral>();
 		for(int i=0;i<meth.getBody().getStatements().size();i++){
 		
 			CtStatement line =meth.getBody().getStatement(i);
 			
 			//System.out.println(line.toString());
 			List<CtLiteral> list=line.getElements(new TypeFilter(CtLiteral.class));
-			if(list.size()!=0){
-				method.literals=list;
-				return method;
-			}
+			literalOfMethod.addAll(list);
 			//method.literals.addAll(list);
 			//System.out.println(list.size());
 			/*for(int j=0;j<list.size();j++){
@@ -110,6 +108,11 @@ public class TestClassProcessor extends AbstractProcessor<CtElement>{
 				System.out.println(line.toString());
 			}*/
 			
+		}
+		if(literalOfMethod.size()!=0){
+			System.out.println(literalOfMethod.size());
+			method.literals=literalOfMethod;
+			return method;
 		}
 		return null;
 	}

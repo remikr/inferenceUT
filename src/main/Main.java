@@ -43,7 +43,7 @@ public class Main
     	//System.out.println(methods.toString());
     	ArrayList<ParamTestFile> paramTestFiles = new ArrayList<ParamTestFile>();
     	for(Method method : methods){
-    		paramTestFiles.add(new ParamTestFile(method));
+    		paramTestFiles.add(new ParamTestFile(method,launcher.getFactory()));
     	}
     	
     	createNewTestFiles(paramTestFiles,input);
@@ -56,7 +56,7 @@ public class Main
     	for(ParamTestFile paramTestFile : paramTestFiles){
     		System.out.println(paramTestFile.getFileCode());
     		try {
-    			File file = new File(input+"\\"+paramTestFile.getFileName());
+    			File file = new File(input+"/"+paramTestFile.getFileName());
     			FileWriter fw = new FileWriter(file.getAbsoluteFile());
     			BufferedWriter bw = new BufferedWriter(fw);
 				bw.write(paramTestFile.getFileCode());

@@ -3,21 +3,24 @@
 package main;
 
 
+@org.junit.runner.RunWith(value = org.junit.runners.Parameterized.class)
 public class ParamTestDoFunct {
-    public ParamTestDoFunct(final int number) {
-        this.number = number;
+    int a;
+
+    public ParamTestDoFunct(final int a) {
+        this.a = a;
     }
 
-    @main.Parameters
-    public static main.Collection<java.lang.Object[]> params() {
-        return Arrays.asList(new java.lang.Object[]{ 3 }, new java.lang.Object[]{ 5 });
+    @org.junit.runners.Parameterized.Parameters
+    public static java.util.Collection<java.lang.Object[]> params() {
+        return java.util.Arrays.asList(new java.lang.Object[]{ 5 }, new java.lang.Object[]{ 5 });
     }
 
     @org.junit.Test
     public void TestDoFunct() {
         Calcul cal = new Calcul();
-        cal.setFact(5);
-        org.junit.Assert.assertEquals(5, cal.getFact());
+        cal.setFact(a);
+        org.junit.Assert.assertEquals(a, cal.getFact());
     }
 }
 

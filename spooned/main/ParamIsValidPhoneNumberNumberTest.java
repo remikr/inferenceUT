@@ -3,8 +3,11 @@
 package main;
 
 
+@org.junit.runner.RunWith(value = org.junit.runners.Parameterized.class)
 public class ParamIsValidPhoneNumberNumberTest {
-    public ParamIsValidPhoneNumberNumberTest(final int number) {
+    int a;
+
+    public ParamIsValidPhoneNumberNumberTest(final int a) {
         this.number = number;
     }
 
