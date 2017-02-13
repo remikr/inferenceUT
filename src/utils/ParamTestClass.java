@@ -1,5 +1,7 @@
 package utils;
 
+import generator.ValueGenerator;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,23 +16,28 @@ import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.factory.Factory;
 import spoon.reflect.visitor.filter.TypeFilter;
 
-public class ParamTestFile {
+public class ParamTestClass {
 	public String importS;
 	public String className;
-	public Method method;
+	public ParamTestMethod method;
 	Factory factory;
 	ValueGenerator valueGen=new ValueGenerator();
 	
-	public ParamTestFile(Method method,Factory factory) {
+	public ParamTestClass(ParamTestMethod method,Factory factory) {
 		this.factory=factory;
 		this.method=method;
 		className="Param"+method.getName().substring(0,1).toUpperCase()+method.getName().substring(1);
 	}
 	
-	public String getFileName(){
-		System.out.println(method.packageName+"/"+className+".java");
-		return method.packageName+"/"+className+".java";
+	public String getClassName(){
+		//System.out.println(method.packageName+"/"+className+".java");
+		return className;
 	}
+	
+	public String getPackageName(){
+		return method.packageName;
+	}
+	
 	public String getPackageCode(){
 		String code="";
 		code=code+"package "+method.packageName+";\n";
@@ -88,10 +95,15 @@ public class ParamTestFile {
 		HashMap<String,Variable> map = new HashMap<String,Variable>();
  		int i=0;
 		for(CtLiteral literal : literals){
+			//SSystem.out.println(literal.toString());
+			if(literal.getType().toString().equals("<nulltype>")){
+				
+			}else 
 			if(!map.containsKey(literal.toString())){
+				//System.out.println("nouvelle variable");
 				Variable  v= new Variable();
 				//v.literal = literal.toString();
-				
+				//System.out.println("type:"+literal.getType().toString());
 				v.type= literal.getType().toString();
 				v.name=getVariableName(i++);
 				v.ctLiterals.add(literal);
@@ -109,6 +121,7 @@ public class ParamTestFile {
 				//literalsName.get(literalsName.indexOf(literal.toString()));
 			}
 		}
+		//System.out.println(variables.size());
 		return variables;
 		
 	}
@@ -143,7 +156,7 @@ public class ParamTestFile {
 		
 	}
 	
-	public String getFileCode(){
+	public String getCode(){
 		String code="";
 		code=code+getPackageCode()+"\n";
 		code=code+getImportCode()+"\n";

@@ -10,12 +10,12 @@ import spoon.reflect.code.CtBlock;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.declaration.CtMethod;
 
-public class Method {
+public class ParamTestMethod {
 	public String packageName;
 	public List<CtLiteral> literals;
 	public CtMethod method;
 	
-	public Method() {
+	public ParamTestMethod() {
 		literals=new ArrayList<CtLiteral>();
 	}
 	

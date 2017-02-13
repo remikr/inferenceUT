@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import main.Statistic;
+
 import spoon.processing.AbstractProcessor;
 import spoon.reflect.code.CtBinaryOperator;
 import spoon.reflect.code.CtCodeSnippetStatement;
@@ -21,23 +23,23 @@ import spoon.reflect.declaration.CtPackage;
 import spoon.reflect.visitor.Filter;
 import spoon.reflect.visitor.filter.AbstractFilter;
 import spoon.reflect.visitor.filter.TypeFilter;
-import utils.Literal;
-import utils.Method;
+import utils.ParamTestMethod;
 
 public class TestClassProcessor extends AbstractProcessor<CtElement>{
-	List<Method> testMethods=null;
+	Statistic stat;
+	List<ParamTestMethod> testMethods=null;
 	CtClass classe=null;
-	Literal literal = new Literal(getFactory());
+	//Literal literal = new Literal(getFactory());
 	
-	public TestClassProcessor(List<Method> testMethods){
+	public TestClassProcessor(Statistic stat,List<ParamTestMethod> testMethods){
+		this.stat=stat;
 		this.testMethods=testMethods;
 	}
-	
-	
 
 	public void process(CtElement elem) {
 		 if (elem instanceof CtClass) {
 			 classe= (CtClass)elem;
+			 //System.out.println(classe.getQualifiedName());
 			 Set<CtMethod> methods = classe.getMethods();
 			 for(CtMethod meth: methods){
 				 //System.out.println("meth: "+meth.getSimpleName());
@@ -45,8 +47,8 @@ public class TestClassProcessor extends AbstractProcessor<CtElement>{
 					 CtAnnotation<?> annot = meth.getAnnotations().get(i);
 					 //System.out.println("annot: "+annot.getAnnotationType().getSimpleName());
 					 if(annot.getAnnotationType().getSimpleName().equals("Test")){
-						 Method  method =testMethod(meth);
-						
+						 stat.nbTestMethod++;
+						 ParamTestMethod  method =testMethod(meth);
 						 if(method!=null){
 							 method.method=meth;
 							 method.packageName=classe.getPackage().toString();
@@ -63,27 +65,10 @@ public class TestClassProcessor extends AbstractProcessor<CtElement>{
 		 }
 		 
 		
-		 if (elem instanceof CtMethod<?>) {
-			 CtMethod meth = (CtMethod) elem;
-			 //System.out.println("meth: "+meth.getSimpleName());
-			
-			 //System.out.println(meth);
-		 }
-		 
-		 
-		 
-		/* if (elem instanceof CtLiteral) {
-			System.out.println("literal");
-			System.out.println(elem.toString());
-			
-		 }*/
-	
-		 
-		
 	}
 	
-	public Method testMethod(CtMethod meth){
-		Method method= new Method();
+	public ParamTestMethod testMethod(CtMethod meth){
+		ParamTestMethod method= new ParamTestMethod();
 		//System.out.println("nom meth: "+meth.getSimpleName());
 		//method.name=meth.getSimpleName();
 		//method.signature=meth.getSignature();
@@ -97,36 +82,17 @@ public class TestClassProcessor extends AbstractProcessor<CtElement>{
 			
 			//System.out.println(line.toString());
 			List<CtLiteral> list=line.getElements(new TypeFilter(CtLiteral.class));
+
 			literalOfMethod.addAll(list);
 			//method.literals.addAll(list);
 			//System.out.println(list.size());
-			/*for(int j=0;j<list.size();j++){
-				CtLiteral lit=list.get(j);
-				System.out.println("lit"+lit.toString()+lit.getType().toString());
-				lit.replace( getFactory().Code().createCodeSnippetExpression("x") );
-				System.out.println("litchange"+lit);
-				System.out.println(line.toString());
-			}*/
-			
 		}
 		if(literalOfMethod.size()!=0){
-			System.out.println(literalOfMethod.size());
+			//System.out.println(literalOfMethod.size());
 			method.literals=literalOfMethod;
 			return method;
 		}
 		return null;
 	}
-	
-	 /*public void compile() {
-			JavaOutputProcessor fileOutput = new JavaOutputProcessor(new File(""));
-			ByteCodeOutputProcessor classOutput = new ByteCodeOutputProcessor(fileOutput, new File(""));
-			classOutput.setFactory(getFactory());
-			classOutput.init();
-			for (CtSimpleType<?> type : getFactory().Class().getAll()) {
-				classOutput.process(type);
-			}
-			classOutput.processingDone();
-		}*/
-	
 
 }
